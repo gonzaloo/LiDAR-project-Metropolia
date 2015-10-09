@@ -1,0 +1,42 @@
+<script>
+function zeroPad(num, places) {
+  var zero = places - num.toString().length + 1;
+  return Array(+(zero > 0 && zero)).join("0") + num;
+}
+
+function fakedata() {
+var floatspeed = (Math.random() * 100);
+var speed = floatspeed.toFixed(1); 
+console.log(speed);
+    var today = new Date();
+    var dd = zeroPad(today.getDate(), 2);
+    var mo = zeroPad(today.getMonth()+1, 2); //January is 0!
+    var hh = zeroPad(today.getHours(), 2);
+    var mm = zeroPad(today.getMinutes(), 2);
+    var ss = zeroPad(today.getSeconds(), 2);
+    var yyyy = today.getFullYear();
+    //var today = dd+'/'+mm+'/'+yyyy;
+	var string = ""
+	var today = string.concat(yyyy,"",mo,"",dd,"",hh,"",mm,"",ss);
+    console.log(today); 
+var url = "http://lidar.educloud.metropolia.fi/~joakim/test.php?timestamp="+today+"&speed="+speed
+
+console.log(url); 
+httpGetAsync(url,response);
+}
+function response(text) {
+console.log(text);
+}
+
+function httpGetAsync(theUrl, callback)
+{
+    var xmlHttp = new XMLHttpRequest();
+    xmlHttp.onreadystatechange = function() { 
+        if (xmlHttp.readyState == 4 && xmlHttp.status == 200)
+            callback(xmlHttp.responseText);
+    }
+    xmlHttp.open("GET", theUrl, true); // true for asynchronous 
+    xmlHttp.send(null);
+}
+</script>
+ <button onclick="fakedata()">Click me</button> 
