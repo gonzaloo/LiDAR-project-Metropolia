@@ -1,6 +1,6 @@
 <?php
 //read the json file contents
-$jsondata = file_get_contents('http://localhost/~joakim/json.php');
+$jsondata = $_POST['json'];
 //convert json object to php associative array
 $data = json_decode($jsondata, true);
 
@@ -8,7 +8,7 @@ $servername = "localhost";
 $username = "joakim";
 $password = "mysqlpassword";
 $dbname = "joakim";
-
+$inserted = 0;
 $input_device = $_GET['deviceID'];
 
 // Create connection
@@ -25,9 +25,10 @@ $stmt->bind_param("iiid", $deviceID, $date, $time, $speed);
 
 // for each entry in the array from our decoded json
     foreach ($data as $key => $value) {
-      echo "key: " . $key;
+      /* echo "key: " . $key;
       echo "speed: " . $value;
-      echo "<br />\n";
+      echo "<br />\n"; */
+      $inserted++
       $deviceID = $input_device;      //our deviceID comes from GET
       $date = mb_substr($key, 0, 8);  //split the date from the timestamp
       $time = mb_substr($key, 8);     //split the time from the timestamp
@@ -35,7 +36,7 @@ $stmt->bind_param("iiid", $deviceID, $date, $time, $speed);
       $stmt->execute();
     };
 
-echo "Inserted.";
+echo "Inserted " . $inserted . " rows.";
 
 $stmt->close();
 $conn->close();

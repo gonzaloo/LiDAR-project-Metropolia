@@ -1,42 +1,55 @@
+<html>
+<head>
+  <title>Fake speed generator</title>
 <script>
+// i stole this
 function zeroPad(num, places) {
   var zero = places - num.toString().length + 1;
   return Array(+(zero > 0 && zero)).join("0") + num;
 }
 
 function fakedata() {
-var floatspeed = (Math.random() * 100);
-var speed = floatspeed.toFixed(1); 
-console.log(speed);
+var floatspeed = (Math.random() * 100); // generate something
+var speed = floatspeed.toFixed(1); // dem decimals, yo
+console.log(speed); // ayy lets print dat fake speed
     var today = new Date();
-    var dd = zeroPad(today.getDate(), 2);
-    var mo = zeroPad(today.getMonth()+1, 2); //January is 0!
+    var dd = zeroPad(today.getDate(), 2); // padding because i don't want single digits
+    var mo = zeroPad(today.getMonth()+1, 2); //january is 0? why
     var hh = zeroPad(today.getHours(), 2);
     var mm = zeroPad(today.getMinutes(), 2);
     var ss = zeroPad(today.getSeconds(), 2);
     var yyyy = today.getFullYear();
-    //var today = dd+'/'+mm+'/'+yyyy;
-	var string = ""
-	var today = string.concat(yyyy,"",mo,"",dd,"",hh,"",mm,"",ss);
-    console.log(today); 
-var url = "http://lidar.educloud.metropolia.fi/~joakim/test.php?timestamp="+today+"&speed="+speed
-
-console.log(url); 
+	  var string = "" // need to make a string to concatenate a string
+	  var today = string.concat(yyyy,"",mo,"",dd,"",hh,"",mm,"",ss); //no idea if those ""'s are needed, but i added them anyway. hu-ah!
+    console.log(today);
+    var url = "http://lidar.educloud.metropolia.fi/~joakim/test.php?timestamp="+today+"&speed="+speed
+// this url inserts this speed and time into a json file which you can get from
+// http://lidar.educloud.metropolia.fi/~joakim/json.php
+// there's a sample mysql inserter at http://lidar.educloud.metropolia.fi/~joakim/mysql_connect.php
+// there's gonna be a reciever at http://lidar.educloud.metropolia.fi/~joakim/receive.php?deviceID=n (json is sent as POST under the variable 'json')
+// print the url (i'm still not sure this works 100% of the time)
+// then do the http request.
+console.log(url);
 httpGetAsync(url,response);
 }
 function response(text) {
 console.log(text);
 }
-
+// we make a a http request. asynchronously, so we don't make the browser or user wait while it completes in the background.
 function httpGetAsync(theUrl, callback)
 {
     var xmlHttp = new XMLHttpRequest();
-    xmlHttp.onreadystatechange = function() { 
+    xmlHttp.onreadystatechange = function() {
         if (xmlHttp.readyState == 4 && xmlHttp.status == 200)
             callback(xmlHttp.responseText);
     }
-    xmlHttp.open("GET", theUrl, true); // true for asynchronous 
+    xmlHttp.open("GET", theUrl, true); // true for asynchronous
     xmlHttp.send(null);
 }
 </script>
- <button onclick="fakedata()">Click me</button> 
+</head>
+<body>
+// push the button
+ <button onclick="fakedata()">Click me</button>
+ </body>
+</html>
