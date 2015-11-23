@@ -1,6 +1,7 @@
 #!/usr/bin/node
 
 "use strict";
+var fs = require('fs');
 var colors = require('colors');
 var Cylon = require("cylon");
 var previousdistance = 0;
@@ -35,16 +36,21 @@ Cylon.robot({
                 change = (previousdistance - data);
 //              console.log("difference: " + change);
                 if (change > 5){
-                speed_no_fix = change * 3.6 * (elapsedtime / 1000);
+//              speed_no_fix = change * 3.6 * (elapsedtime/1000);
+                speed_no_fix = (change/elapsedtime) * 36;
                 speed = speed_no_fix.toFixed(2)
 //              speed2 = change * 0.36;
 //              console.log("time: " + elapsedtime);
 //              console.log("velocity: " + speed + " km/h");
-                if(change < 700){
-                console.log(change + br + br  + elapsedtime + br + br + speed +" km/h");
+                if(change < 500){
+                        console.log(change + br + br  + elapsedtime + br + br + speed +" km/h");
                 }
                 else{
-                console.log(colors.red(change) + br + br  + elapsedtime + br + br + speed +" km/h");
+                        fs.appendFile('log.txt', change + "\n" ,function(err){
+                                if (err) throw err;
+                        });
+                  //logs the change for the given condition in log.txt file
+                        console.log(colors.red(change) + br + br  + elapsedtime + br + br + speed +" km/h");
                 }
 //              console.log("uncorrected: " + speed2);
         }
